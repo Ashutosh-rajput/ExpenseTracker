@@ -27,12 +27,12 @@ public class Expense {
 
 
 
-        @OneToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "user_id")
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "user_id", referencedColumnName = "user_id")
         private UserInfo userInfo;
 
         @ManyToOne
-        @JoinColumn(name = "budget_id")
+        @JoinColumn(name = "budget_id", referencedColumnName = "budget_id")
         private Budget budget;
 
 

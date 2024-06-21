@@ -19,7 +19,7 @@ public class UserInfo {
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "seq")
     @SequenceGenerator(name = "seq",sequenceName = "ex_seq",allocationSize = 1)
     @Column(name = "user_id")
-    private Long userId;
+    private Long user_id;
 
     @Column(name = "username", nullable = false, unique = true)
     private String username;
@@ -37,12 +37,12 @@ public class UserInfo {
     private Long mobile;
 
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userInfo")
     private Set<Expense> expenses;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userInfo")
     private Set<Budget> budgets;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userInfo")
     private Set<Earning> earnings;
 }

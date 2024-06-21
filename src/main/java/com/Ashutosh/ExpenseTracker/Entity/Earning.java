@@ -27,10 +27,9 @@ public class Earning {
         private LocalDateTime createdAt;
 
 
-        @OneToOne
-        @JoinColumn(name = "user_id")
+        @ManyToOne
+        @JoinColumn(name = "user_id", referencedColumnName = "user_id")
         private UserInfo userInfo;
-
 
 
 }
