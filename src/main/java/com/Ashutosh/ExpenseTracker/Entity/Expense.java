@@ -1,6 +1,8 @@
 package com.Ashutosh.ExpenseTracker.Entity;
 import jakarta.persistence.*;
+import jdk.jfr.Timestamp;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 @ToString
@@ -12,18 +14,20 @@ import java.time.LocalDateTime;
 @Table(name = "Expense")
 public class Expense {
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "seq")
+        @SequenceGenerator(name = "seq",sequenceName = "ex_seq",allocationSize = 1)
         private Long expense_id;
         @Column(name = "Amount", nullable = false)
         private Double amount;
         @Column(name = "Date", nullable = false)
+        @CreationTimestamp
         private LocalDateTime createdAt;
         private String description;
 
-        @PrePersist
-        protected void onCreate() {
-                createdAt = LocalDateTime.now();
-        }
+//        @PrePersist
+//        protected void onCreate() {
+//                createdAt = LocalDateTime.now();
+//        }
 
 
 //        @ManyToOne

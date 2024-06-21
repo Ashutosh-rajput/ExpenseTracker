@@ -14,7 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Budget {
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "seq")
+        @SequenceGenerator(name = "seq",sequenceName = "ex_seq",allocationSize = 1)
         private Long budget_id;
         @Column(nullable = false)
         private String budget_name;

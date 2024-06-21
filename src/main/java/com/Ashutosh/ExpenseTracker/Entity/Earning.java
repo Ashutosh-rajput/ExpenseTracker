@@ -14,7 +14,8 @@ import java.time.LocalDateTime;
 @Table(name = "Earnings")
 public class Earning {
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "seq")
+        @SequenceGenerator(name = "seq",sequenceName = "ex_seq",allocationSize = 1)
         private Long earning_id;
         private String earning_name;
         @Column(nullable = false)
