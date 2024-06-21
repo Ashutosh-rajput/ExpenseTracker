@@ -1,6 +1,7 @@
 package com.Ashutosh.ExpenseTracker.Entity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,17 +23,14 @@ public class Earning {
         private Double total_amount;
         private boolean isRecurring;
         private LocalDate date;
+        @CreationTimestamp
         private LocalDateTime createdAt;
-        @PrePersist
-        protected void onCreate() {
-                createdAt = LocalDateTime.now();
-        }
 
-//        @OneToOne
-//        @JoinColumn(name = "user_id")
-//        private UserInfo userInfo;
 
-        // getters and setters
+        @OneToOne
+        @JoinColumn(name = "user_id")
+        private UserInfo userInfo;
+
 
 
 }

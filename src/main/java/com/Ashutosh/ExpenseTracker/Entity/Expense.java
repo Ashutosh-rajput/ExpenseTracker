@@ -24,19 +24,16 @@ public class Expense {
         private LocalDateTime createdAt;
         private String description;
 
-//        @PrePersist
-//        protected void onCreate() {
-//                createdAt = LocalDateTime.now();
-//        }
 
 
-//        @ManyToOne
-//        @JoinColumn(name = "user_id")
-//        private UserInfo userInfo;
-//
-//        @ManyToOne
-//        @JoinColumn(name = "budget_id")
-//        private Budget budget;
+
+        @OneToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "user_id")
+        private UserInfo userInfo;
+
+        @ManyToOne
+        @JoinColumn(name = "budget_id")
+        private Budget budget;
 
 
 

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 @ToString
 @Getter
@@ -35,14 +36,13 @@ public class UserInfo {
     @Column(name = "mobile", nullable = false, unique = true)
     private Long mobile;
 
-//    @Column(name = "dob", nullable = false)
-//    private String dob;
-//    @OneToMany(mappedBy = "user")
-//    private List<Expense> expenses;
-//
-//    @OneToMany(mappedBy = "user")
-//    private List<Budget> budgets;
-//
-//    @OneToMany(mappedBy = "user")
-//    private List<Earning> earnings;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Set<Expense> expenses;
+
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    private Set<Budget> budgets;
+
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    private Set<Earning> earnings;
 }

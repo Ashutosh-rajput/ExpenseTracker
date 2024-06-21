@@ -1,6 +1,8 @@
 package com.Ashutosh.ExpenseTracker.Entity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,21 +22,31 @@ public class Budget {
         @Column(nullable = false)
         private String budget_name;
         private Double amount_limit;
+        @CreationTimestamp
         private LocalDateTime createdAt;
-        @PrePersist
-        protected void onCreate() {
-                createdAt = LocalDateTime.now();
-        }
+
+        @OneToOne
+        @JoinColumn(name = "user_id")
+        private UserInfo userInfo;
+
+        @OneToMany(mappedBy = "budget")
+        private List<Expense> expenses;
 
 
-//        @ManyToOne
-//        @JoinColumn(name = "user_id")
-//        private UserInfo userInfo;
-//
-//        @OneToMany(mappedBy = "budget")
-//        private List<Expense> expenses;
-
-        // getters and setters
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
