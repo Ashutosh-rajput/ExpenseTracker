@@ -1,5 +1,6 @@
 package com.Ashutosh.ExpenseTracker.DTO;
 
+import com.Ashutosh.ExpenseTracker.Entity.UserInfo;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -11,10 +12,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 
 public class EarningDTO {
-    private Long earning_id;
-    private String earning_name;
-    private Double total_amount;
+    private Long earningid;
+    private String earningname;
+    private Double totalamount;
     private boolean isRecurring;
     private LocalDate date;
     private LocalDateTime createdAt;
+
+    private UserInfo userInfo;
 }
+

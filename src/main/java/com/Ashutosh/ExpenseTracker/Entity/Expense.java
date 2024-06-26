@@ -16,7 +16,7 @@ public class Expense {
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "seq")
         @SequenceGenerator(name = "seq",sequenceName = "ex_seq",allocationSize = 1)
-        private Long expense_id;
+        private Long expenseid;
         @Column(name = "Amount", nullable = false)
         private Double amount;
         @Column(name = "Date", nullable = false)
@@ -27,12 +27,12 @@ public class Expense {
 
 
 
-        @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+        @ManyToOne(fetch = FetchType.EAGER)
+        @JoinColumn(name = "userid", referencedColumnName = "userid")
         private UserInfo userInfo;
 
         @ManyToOne
-        @JoinColumn(name = "budget_id", referencedColumnName = "budget_id")
+        @JoinColumn(name = "budgetid", referencedColumnName = "budgetid")
         private Budget budget;
 
 

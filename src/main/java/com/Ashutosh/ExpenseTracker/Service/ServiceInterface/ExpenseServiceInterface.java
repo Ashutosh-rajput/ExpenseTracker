@@ -13,4 +13,5 @@ public interface ExpenseServiceInterface {
     List<ExpenseDTO> getallExpense();
     ExpenseDTO updateexpense (ExpenseDTO expenseDTO, Long id);
     ExpenseDTO deleteexpense(Long id);
+    List<ExpenseDTO> getExpensesByUserId(Long userId);
 }

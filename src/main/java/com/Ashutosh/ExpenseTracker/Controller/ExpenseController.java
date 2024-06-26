@@ -43,4 +43,10 @@ public class ExpenseController {
         return ResponseEntity.ok("Expense deleted.");
     }
 
+    @GetMapping("/expensesbyuserid/{userId}")
+    public ResponseEntity<List<ExpenseDTO>> getExpensesByUserId(@PathVariable Long userId) {
+        List<ExpenseDTO> expenses = expenseService.getExpensesByUserId(userId);
+        return ResponseEntity.ok(expenses);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.Ashutosh.ExpenseTracker.Controller;
 
 import com.Ashutosh.ExpenseTracker.DTO.EarningDTO;
+import com.Ashutosh.ExpenseTracker.DTO.ExpenseDTO;
 import com.Ashutosh.ExpenseTracker.Service.ServiceImpl.EarningServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,5 +42,11 @@ public class EarningController {
     public ResponseEntity<String> deleteEarning(@PathVariable Long id) {
         earningService.deleteEarning(id);
         return ResponseEntity.ok("Deleted");
+    }
+
+    @GetMapping("/earningbyuserid/{userId}")
+    public ResponseEntity<List<EarningDTO>> getExpensesByUserId(@PathVariable Long userId) {
+        List<EarningDTO> earnings= earningService.getEarningByUserId(userId);
+        return ResponseEntity.ok(earnings);
     }
 }

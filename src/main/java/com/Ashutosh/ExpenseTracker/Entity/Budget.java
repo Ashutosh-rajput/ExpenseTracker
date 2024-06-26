@@ -11,26 +11,26 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "Budget")
+@Table
 @AllArgsConstructor
 @NoArgsConstructor
 public class Budget {
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "seq")
         @SequenceGenerator(name = "seq",sequenceName = "ex_seq",allocationSize = 1)
-        private Long budget_id;
-        @Column(nullable = false)
-        private String budget_name;
-        private Double amount_limit;
+        private Long budgetid;
+        @Column
+        private String budgetname;
+        private Double amountlimit;
         @CreationTimestamp
         private LocalDateTime createdAt;
 
         @ManyToOne
-        @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+        @JoinColumn(name = "userid", referencedColumnName = "userid")
         private UserInfo userInfo;
 
-        @OneToMany(mappedBy = "budget")
-        private List<Expense> expenses;
+//        @OneToMany(mappedBy = "budget")
+//        private List<Expense> expenses;
 
 
     }

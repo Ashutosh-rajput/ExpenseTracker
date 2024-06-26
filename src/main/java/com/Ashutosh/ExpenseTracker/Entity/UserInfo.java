@@ -12,16 +12,16 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="tbl_UserInfo")
+@Table
 public class UserInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "seq")
     @SequenceGenerator(name = "seq",sequenceName = "ex_seq",allocationSize = 1)
-    @Column(name = "user_id")
-    private Long user_id;
+    @Column(name = "userid")
+    private Long userid;
 
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(name = "username", nullable = false)
     private String username;
 
     @Column(name = "password", nullable = false)
@@ -30,19 +30,21 @@ public class UserInfo {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "full_name", nullable = false)
+    @Column(name = "fullname", nullable = false)
     private String fullName;
 
-    @Column(name = "mobile", nullable = false, unique = true)
+    @Column(name = "mobile", nullable = false)
     private Long mobile;
 
+    private String roles;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userInfo")
-    private Set<Expense> expenses;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userInfo")
-    private Set<Budget> budgets;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userInfo")
-    private Set<Earning> earnings;
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userInfo")
+//    private Set<Expense> expenses;
+//
+////    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userInfo")
+////    private Set<Budget> budgets;
+//
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userInfo")
+//    private Set<Earning> earnings;
 }

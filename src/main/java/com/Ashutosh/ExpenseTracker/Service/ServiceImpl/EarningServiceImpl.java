@@ -46,8 +46,8 @@ public class EarningServiceImpl implements EarningServiceInterface {
     public EarningDTO updateEarning(EarningDTO earningDTO, Long id) {
         Earning earning = earningRepo.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Earning with id " + id + " not found"));
-        earning.setEarning_name(earningDTO.getEarning_name());
-        earning.setTotal_amount(earningDTO.getTotal_amount());
+        earning.setEarningname(earningDTO.getEarningname());
+        earning.setTotalamount(earningDTO.getTotalamount());
         earning.setDate(earningDTO.getDate());
         Earning updatedEarning = earningRepo.save(earning);
         return earningMapper.earningToEarningDTO(updatedEarning);
@@ -59,5 +59,13 @@ public class EarningServiceImpl implements EarningServiceInterface {
                 new ResourceNotFoundException("Earning with id " + id + " not found"));
         earningRepo.delete(earning);
         return earningMapper.earningToEarningDTO(earning);
+    }
+
+    @Override
+    public List<EarningDTO> getEarningByUserId(Long userId) {
+        List<Earning> earnings = earningRepo.findByUserInfo_userid(userId);
+        return earnings.stream()
+                .map(earning -> earningMapper.earningToEarningDTO(earning))
+                .toList();
     }
 }

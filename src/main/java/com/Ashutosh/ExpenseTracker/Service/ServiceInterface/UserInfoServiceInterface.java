@@ -11,4 +11,6 @@ public interface UserInfoServiceInterface {
     UserInfoDTO updateuser(UserInfoDTO userInfoDTO, Long id);
     UserInfoDTO deleteuser(Long id);
 
+    UserInfoDTO getUserByUsername(String username);
+
 }

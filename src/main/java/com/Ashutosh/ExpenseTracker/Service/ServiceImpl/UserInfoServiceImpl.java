@@ -7,6 +7,7 @@ import com.Ashutosh.ExpenseTracker.Mapper.UserInfoMapper;
 import com.Ashutosh.ExpenseTracker.Repository.UserInfoRepo;
 import com.Ashutosh.ExpenseTracker.Service.ServiceInterface.UserInfoServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,10 +18,14 @@ public class UserInfoServiceImpl implements UserInfoServiceInterface {
     private UserInfoMapper userInfoMapper;
     @Autowired
     private UserInfoRepo userInfoRepo;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserInfoDTO createUser(UserInfoDTO userInfoDTO) {
         UserInfo userInfo=userInfoMapper.userInfoDTOtouserInfo(userInfoDTO);
+        userInfo.setRoles("ROLE_USER");
+        userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
         UserInfo savedUserInfo=userInfoRepo.save(userInfo);
         return userInfoMapper.userInfotouserInfoDTO(savedUserInfo);
     }
@@ -58,6 +63,14 @@ public class UserInfoServiceImpl implements UserInfoServiceInterface {
                 ()->new ResourceNotFoundException("user not found")
         );
         userInfoRepo.delete(user);
+        return userInfoMapper.userInfotouserInfoDTO(user);
+    }
+
+    @Override
+    public UserInfoDTO getUserByUsername(String username) {
+        UserInfo user=userInfoRepo.findByusername(username).orElseThrow(
+                ()->new ResourceNotFoundException("user not found")
+        );
         return userInfoMapper.userInfotouserInfoDTO(user);
     }
 }

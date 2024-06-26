@@ -1,6 +1,7 @@
 package com.Ashutosh.ExpenseTracker.Controller;
 
 import com.Ashutosh.ExpenseTracker.DTO.BudgetDTO;
+import com.Ashutosh.ExpenseTracker.DTO.ExpenseDTO;
 import com.Ashutosh.ExpenseTracker.Service.ServiceImpl.BudgetServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,5 +42,11 @@ public class BudgetController {
     public ResponseEntity<String> deleteBudget(@PathVariable Long id) {
         budgetService.deleteBudget(id);
         return ResponseEntity.ok("Deleted");
+    }
+
+    @GetMapping("/budgetsbyuserid/{userId}")
+    public ResponseEntity<List<BudgetDTO>> getExpensesByUserId(@PathVariable Long userId) {
+        List<BudgetDTO> budgets = budgetService.getBudgetByUserId(userId);
+        return ResponseEntity.ok(budgets);
     }
 }

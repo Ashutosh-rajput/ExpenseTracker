@@ -44,8 +44,8 @@ public class BudgetServiceImpl implements BudgetServiceInterface {
         public BudgetDTO updateBudget(BudgetDTO budgetDTO, Long id) {
             Budget budget = budgetRepo.findById(id).orElseThrow(() ->
                     new ResourceNotFoundException("Budget with id " + id + " doesn't exist"));
-            budget.setBudget_name(budgetDTO.getBudget_name());
-            budget.setAmount_limit(budgetDTO.getAmount_limit());
+            budget.setBudgetname(budgetDTO.getBudgetname());
+            budget.setAmountlimit(budgetDTO.getAmountlimit());
             Budget updatedBudget = budgetRepo.save(budget);
             return budgetMapper.budgetToBudgetDTO(updatedBudget);
         }
@@ -57,6 +57,13 @@ public class BudgetServiceImpl implements BudgetServiceInterface {
             budgetRepo.delete(budget);
             return budgetMapper.budgetToBudgetDTO(budget);
         }
+
+    @Override
+    public List<BudgetDTO> getBudgetByUserId(Long userId) {
+        List<Budget> budgets = budgetRepo.findByUserInfo_userid(userId);
+        return budgets.stream().map(budget -> budgetMapper.budgetToBudgetDTO(budget)).toList();
+
     }
+}
 
 

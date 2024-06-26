@@ -55,4 +55,12 @@ public class ExpenseServiceImpl implements ExpenseServiceInterface {
         expenseRepo.delete(expense);
         return expenseMapper.expenseToExpenseDTO(expense);
     }
+
+    @Override
+    public List<ExpenseDTO> getExpensesByUserId(Long userId) {
+        List<Expense> expenses=expenseRepo.findByUserInfo_userid(userId);
+        return expenses.stream().map((expense) ->expenseMapper.expenseToExpenseDTO(expense)).toList();
+    }
+
+
 }

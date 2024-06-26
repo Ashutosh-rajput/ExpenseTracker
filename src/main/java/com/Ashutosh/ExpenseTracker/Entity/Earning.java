@@ -12,15 +12,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "Earnings")
+@Table
 public class Earning {
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "seq")
         @SequenceGenerator(name = "seq",sequenceName = "ex_seq",allocationSize = 1)
-        private Long earning_id;
-        private String earning_name;
+        private Long earningid;
+        private String earningname;
         @Column(nullable = false)
-        private Double total_amount;
+        private Double totalamount;
         private boolean isRecurring;
         private LocalDate date;
         @CreationTimestamp
@@ -28,7 +28,7 @@ public class Earning {
 
 
         @ManyToOne
-        @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+        @JoinColumn(name = "userid", referencedColumnName = "userid")
         private UserInfo userInfo;
 
 
