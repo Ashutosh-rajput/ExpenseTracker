@@ -32,7 +32,7 @@ public class UserInfoController {
 
     @GetMapping("/get-user/{id}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-//    @PreAuthorize("hasAuthority('ADMIN')")
+//
     public ResponseEntity<UserInfoDTO> getUserById(@PathVariable Long id){
         UserInfoDTO userInfoDTO=userInfoService.getuserbyid(id);
         return ResponseEntity.ok(userInfoDTO);
@@ -52,7 +52,7 @@ public class UserInfoController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteuser(@PathVariable Long id){
         userInfoService.deleteuser(id);
         return ResponseEntity.ok("Deleted");

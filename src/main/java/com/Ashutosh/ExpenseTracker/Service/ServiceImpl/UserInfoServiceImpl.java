@@ -6,6 +6,7 @@ import com.Ashutosh.ExpenseTracker.ExceptionHandler.ResourceNotFoundException;
 import com.Ashutosh.ExpenseTracker.Mapper.UserInfoMapper;
 import com.Ashutosh.ExpenseTracker.Repository.UserInfoRepo;
 import com.Ashutosh.ExpenseTracker.Service.ServiceInterface.UserInfoServiceInterface;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Slf4j
 public class UserInfoServiceImpl implements UserInfoServiceInterface {
     @Autowired
     private UserInfoMapper userInfoMapper;
@@ -24,6 +26,7 @@ public class UserInfoServiceImpl implements UserInfoServiceInterface {
     @Override
     public UserInfoDTO createUser(UserInfoDTO userInfoDTO) {
         UserInfo userInfo=userInfoMapper.userInfoDTOtouserInfo(userInfoDTO);
+        log.info("userInfo:{}",userInfo);
         userInfo.setRoles("ROLE_USER");
         userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
         UserInfo savedUserInfo=userInfoRepo.save(userInfo);
@@ -52,7 +55,7 @@ public class UserInfoServiceImpl implements UserInfoServiceInterface {
         user.setUsername(userInfoDTO.getUsername());
         user.setEmail(userInfoDTO.getEmail());
         user.setFullName(userInfoDTO.getFullName());
-        user.setMobile(userInfoDTO.getMobile());
+//        user.setMobile(userInfoDTO.getMobile());
         UserInfo updateduser=userInfoRepo.save(user);
         return userInfoMapper.userInfotouserInfoDTO(updateduser);
     }
