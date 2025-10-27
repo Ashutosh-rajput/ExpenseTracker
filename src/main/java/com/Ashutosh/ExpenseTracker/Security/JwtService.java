@@ -1,49 +1,50 @@
 package com.Ashutosh.ExpenseTracker.Security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import com.nimbusds.jose.*;
+import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
-import java.security.Key;
+import java.text.ParseException;
+import java.util.Base64;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 @Component
 public class JwtService {
+
     @Value("${app.jwt-secret}")
-    private String Secret;
-
-
-//    @Value("${app.jwt-expiration-milliseconds}")
-//    private Long ExpirationDate;
+    private String secret;
 
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+        return extractClaim(token, JWTClaimsSet::getSubject);
     }
 
     public Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
+        return extractClaim(token, JWTClaimsSet::getExpirationTime);
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+    public <T> T extractClaim(String token, Function<JWTClaimsSet, T> claimsResolver) {
+        try {
+            JWTClaimsSet claims = extractAllClaims(token);
+            return claimsResolver.apply(claims);
+        } catch (ParseException | JOSEException e) {
+            // Handle exception appropriately, maybe log it
+            throw new RuntimeException("Failed to extract claim from token", e);
+        }
     }
 
-    private Claims extractAllClaims(String token) {
-        return Jwts
-                .parser()
-                .setSigningKey(getSignkey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+    private JWTClaimsSet extractAllClaims(String token) throws ParseException, JOSEException {
+        SignedJWT signedJWT = SignedJWT.parse(token);
+        JWSVerifier verifier = new MACVerifier(getSigningKey());
+        if (!signedJWT.verify(verifier)) {
+            throw new JOSEException("Invalid JWT signature");
+        }
+        return signedJWT.getJWTClaimsSet();
     }
 
     private Boolean isTokenExpired(String token) {
@@ -55,34 +56,39 @@ public class JwtService {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
+    public String generateToken(String username) {
+        try {
+            JWSSigner signer = new MACSigner(getSigningKey());
 
+            long nowMillis = System.currentTimeMillis();
+            Date now = new Date(nowMillis);
+            long expMillis = nowMillis + 1000 * 60 * 30; // 30 minutes
+            Date exp = new Date(expMillis);
 
+            JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+                    .subject(username)
+                    .issueTime(now)
+                    .expirationTime(exp)
+                    .build();
 
+            SignedJWT signedJWT = new SignedJWT(
+                    new JWSHeader(JWSAlgorithm.HS256),
+                    claimsSet);
 
+            signedJWT.sign(signer);
 
-
-    public String generateToken(String username){
-        Map<String,Object> claims=new HashMap<>();
-        return createToken(claims,username);
-
+            return signedJWT.serialize();
+        } catch (JOSEException e) {
+            // Handle exception appropriately
+            throw new RuntimeException("Failed to generate token", e);
+        }
     }
 
-    private String createToken(Map<String, Object> claims, String username) {
-        long nowMillis = System.currentTimeMillis();
-        long expMillis = nowMillis + 1000 * 60 * 30; // 30 minutes
-        Date now = new Date(nowMillis);
-        Date exp = new Date(expMillis);
-
-        return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(now)
-                .setExpiration(exp)
-                .signWith(getSignkey(), SignatureAlgorithm.HS256)
-                .compact();
-    }
-
-    private Key getSignkey() {
-        byte[] keyBytes= Decoders.BASE64.decode(Secret);
-        return Keys.hmacShaKeyFor(keyBytes);
+    private byte[] getSigningKey() {
+        byte[] keyBytes = Base64.getDecoder().decode(secret);
+        if (keyBytes.length < 32) {
+            throw new IllegalArgumentException("The secret key must be at least 256 bits (32 bytes) for HS256 algorithm.");
+        }
+        return keyBytes;
     }
 }
